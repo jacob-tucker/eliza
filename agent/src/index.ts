@@ -4,7 +4,6 @@ import { RedisClient } from "@elizaos/adapter-redis";
 import { SqliteDatabaseAdapter } from "@elizaos/adapter-sqlite";
 import { SupabaseDatabaseAdapter } from "@elizaos/adapter-supabase";
 import { AutoClientInterface } from "@elizaos/client-auto";
-import { DiscordClientInterface } from "@elizaos/client-discord";
 import { TwitterClientInterface } from "@elizaos/client-twitter";
 // import { ReclaimAdapter } from "@elizaos/plugin-reclaim";
 import { DirectClient } from "@elizaos/client-direct";
@@ -31,21 +30,14 @@ import {
 } from "@elizaos/core";
 
 import { bootstrapPlugin } from "@elizaos/plugin-bootstrap";
-// import { intifacePlugin } from "@elizaos/plugin-intiface";
-import { echoChambersPlugin } from "@elizaos/plugin-echochambers";
 import { evmPlugin } from "@elizaos/plugin-evm";
-import { fuelPlugin } from "@elizaos/plugin-fuel";
 import { imageGenerationPlugin } from "@elizaos/plugin-image-generation";
-import { multiversxPlugin } from "@elizaos/plugin-multiversx";
 // import { nearPlugin } from "@elizaos/plugin-near";
 import { createNodePlugin } from "@elizaos/plugin-node";
 import { sgxPlugin } from "@elizaos/plugin-sgx";
 import { storyPlugin } from "@elizaos/plugin-story";
 import { TEEMode, teePlugin } from "@elizaos/plugin-tee";
 import { teeLogPlugin } from "@elizaos/plugin-tee-log";
-import { tonPlugin } from "@elizaos/plugin-ton";
-
-import { zksyncEraPlugin } from "@elizaos/plugin-zksync-era";
 
 import Database from "better-sqlite3";
 import fs from "fs";
@@ -515,10 +507,10 @@ export async function initializeClients(
         if (autoClient) clients.auto = autoClient;
     }
 
-    if (clientTypes.includes(Clients.DISCORD)) {
-        const discordClient = await DiscordClientInterface.start(runtime);
-        if (discordClient) clients.discord = discordClient;
-    }
+    // if (clientTypes.includes(Clients.DISCORD)) {
+    //     const discordClient = await DiscordClientInterface.start(runtime);
+    //     if (discordClient) clients.discord = discordClient;
+    // }
 
     // if (clientTypes.includes(Clients.TELEGRAM)) {
     //     const telegramClient = await TelegramClientInterface.start(runtime);
@@ -786,26 +778,32 @@ export async function createAgent(
             //     ? lensPlugin
             //     : null,
             // getSecret(character, "APTOS_PRIVATE_KEY") ? aptosPlugin : null,
-            getSecret(character, "MVX_PRIVATE_KEY")
-                ? multiversxPlugin
-                : null,
-            getSecret(character, "ZKSYNC_PRIVATE_KEY") ? zksyncEraPlugin : null,
-            getSecret(character, "CRONOSZKEVM_PRIVATE_KEY")
-                ? cronosZkEVMPlugin
-                : null,
+            // getSecret(character, "MVX_PRIVATE_KEY")
+            //     ? multiversxPlugin
+            //     : null,
+            // getSecret(character, "ZKSYNC_PRIVATE_KEY")
+            //     ? zksyncEraPlugin
+            //     : null,
+            // getSecret(character, "CRONOSZKEVM_PRIVATE_KEY")
+            //     ? cronosZkEVMPlugin
+            //     : null,
             // getSecret(character, "TEE_MARLIN") ? teeMarlinPlugin : null,
-            getSecret(character, "TON_PRIVATE_KEY") ? tonPlugin : null,
+            // getSecret(character, "TON_PRIVATE_KEY")
+            //     ? tonPlugin
+            //     : null,
             // getSecret(character, "THIRDWEB_SECRET_KEY") ? thirdwebPlugin : null,
             // getSecret(character, "SUI_PRIVATE_KEY") ? suiPlugin : null,
-            getSecret(character, "STORY_PRIVATE_KEY") ? storyPlugin : null,
-            getSecret(character, "FUEL_PRIVATE_KEY") ? fuelPlugin : null,
+            getSecret(character, "STORY_PRIVATE_KEY")
+                ? storyPlugin
+                : null,
+            // getSecret(character, "FUEL_PRIVATE_KEY") ? fuelPlugin : null,
             // getSecret(character, "AVALANCHE_PRIVATE_KEY")
             //     ? avalanchePlugin
             //     : null,
-            getSecret(character, "ECHOCHAMBERS_API_URL") &&
-            getSecret(character, "ECHOCHAMBERS_API_KEY")
-                ? echoChambersPlugin
-                : null,
+            // getSecret(character, "ECHOCHAMBERS_API_URL") &&
+            // getSecret(character, "ECHOCHAMBERS_API_KEY")
+            //     ? echoChambersPlugin
+            //     : null,
             // getSecret(character, "LETZAI_API_KEY") ? letzAIPlugin : null,
             // getSecret(character, "STARGAZE_ENDPOINT") ? stargazePlugin : null,
             // getSecret(character, "GIPHY_API_KEY") ? giphyPlugin : null,
