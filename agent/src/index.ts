@@ -8,7 +8,6 @@ import { DiscordClientInterface } from "@elizaos/client-discord";
 import { TwitterClientInterface } from "@elizaos/client-twitter";
 // import { ReclaimAdapter } from "@elizaos/plugin-reclaim";
 import { DirectClient } from "@elizaos/client-direct";
-import { PrimusAdapter } from "@elizaos/plugin-primus";
 
 import {
     AgentRuntime,
@@ -30,13 +29,9 @@ import {
     stringToUuid,
     validateCharacterConfig,
 } from "@elizaos/core";
-import { zgPlugin } from "@elizaos/plugin-0g";
 
 import { bootstrapPlugin } from "@elizaos/plugin-bootstrap";
 // import { intifacePlugin } from "@elizaos/plugin-intiface";
-import { availPlugin } from "@elizaos/plugin-avail";
-import { confluxPlugin } from "@elizaos/plugin-conflux";
-import { cronosZkEVMPlugin } from "@elizaos/plugin-cronoszkevm";
 import { echoChambersPlugin } from "@elizaos/plugin-echochambers";
 import { evmPlugin } from "@elizaos/plugin-evm";
 import { fuelPlugin } from "@elizaos/plugin-fuel";
@@ -45,17 +40,13 @@ import { multiversxPlugin } from "@elizaos/plugin-multiversx";
 // import { nearPlugin } from "@elizaos/plugin-near";
 import { createNodePlugin } from "@elizaos/plugin-node";
 import { sgxPlugin } from "@elizaos/plugin-sgx";
-import { autonomePlugin } from "@elizaos/plugin-autonome";
 import { storyPlugin } from "@elizaos/plugin-story";
 import { TEEMode, teePlugin } from "@elizaos/plugin-tee";
 import { teeLogPlugin } from "@elizaos/plugin-tee-log";
-import { teeMarlinPlugin } from "@elizaos/plugin-tee-marlin";
 import { tonPlugin } from "@elizaos/plugin-ton";
 
-import { giphyPlugin } from "@elizaos/plugin-giphy";
 import { zksyncEraPlugin } from "@elizaos/plugin-zksync-era";
 
-import { stargazePlugin } from "@elizaos/plugin-stargaze";
 import Database from "better-sqlite3";
 import fs from "fs";
 import net from "net";
@@ -671,20 +662,20 @@ export async function createAgent(
     //     elizaLogger.log("modelProvider", character.modelProvider);
     //     elizaLogger.log("token", token);
     // }
-    if (
-        process.env.PRIMUS_APP_ID &&
-        process.env.PRIMUS_APP_SECRET &&
-        process.env.VERIFIABLE_INFERENCE_ENABLED === "true"
-    ) {
-        verifiableInferenceAdapter = new PrimusAdapter({
-            appId: process.env.PRIMUS_APP_ID,
-            appSecret: process.env.PRIMUS_APP_SECRET,
-            attMode: "proxytls",
-            modelProvider: character.modelProvider,
-            token,
-        });
-        elizaLogger.log("Verifiable inference primus adapter initialized");
-    }
+    // if (
+    //     process.env.PRIMUS_APP_ID &&
+    //     process.env.PRIMUS_APP_SECRET &&
+    //     process.env.VERIFIABLE_INFERENCE_ENABLED === "true"
+    // ) {
+    //     verifiableInferenceAdapter = new PrimusAdapter({
+    //         appId: process.env.PRIMUS_APP_ID,
+    //         appSecret: process.env.PRIMUS_APP_SECRET,
+    //         attMode: "proxytls",
+    //         modelProvider: character.modelProvider,
+    //         token,
+    //     });
+    //     elizaLogger.log("Verifiable inference primus adapter initialized");
+    // }
 
     return new AgentRuntime({
         databaseAdapter: db,
@@ -695,9 +686,9 @@ export async function createAgent(
         // character.plugins are handled when clients are added
         plugins: [
             bootstrapPlugin,
-            getSecret(character, "CONFLUX_CORE_PRIVATE_KEY")
-                ? confluxPlugin
-                : null,
+            // getSecret(character, "CONFLUX_CORE_PRIVATE_KEY")
+            //     ? confluxPlugin
+            //     : null,
             nodePlugin,
             // getSecret(character, "TAVILY_API_KEY") ? webSearchPlugin : null,
             getSecret(character, "SOLANA_PUBLIC_KEY") ||
@@ -708,9 +699,9 @@ export async function createAgent(
             // getSecret(character, "SOLANA_PRIVATE_KEY")
             //     ? solanaAgentkitPlguin
             //     : null,
-            getSecret(character, "AUTONOME_JWT_TOKEN")
-                ? autonomePlugin
-                : null,
+            // getSecret(character, "AUTONOME_JWT_TOKEN")
+            //     ? autonomePlugin
+            //     : null,
             // (getSecret(character, "NEAR_ADDRESS") ||
             //     getSecret(character, "NEAR_WALLET_PUBLIC_KEY")) &&
             // getSecret(character, "NEAR_WALLET_SECRET_KEY")
@@ -724,26 +715,26 @@ export async function createAgent(
             // getSecret(character, "COSMOS_RECOVERY_PHRASE") &&
             //     getSecret(character, "COSMOS_AVAILABLE_CHAINS") &&
             //     createCosmosPlugin(),
-            (getSecret(character, "SOLANA_PUBLIC_KEY") ||
+            ((getSecret(character, "SOLANA_PUBLIC_KEY") ||
                 (getSecret(character, "WALLET_PUBLIC_KEY") &&
                     !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith(
                         "0x"
                     ))) &&
-            getSecret(character, "SOLANA_ADMIN_PUBLIC_KEY") &&
-            getSecret(character, "SOLANA_PRIVATE_KEY") &&
-            // getSecret(character, "SOLANA_ADMIN_PRIVATE_KEY")
-            //     ? nftGenerationPlugin
-            //     : null,
-            getSecret(character, "ZEROG_PRIVATE_KEY")
-                ? zgPlugin
-                : null,
-            // getSecret(character, "COINMARKETCAP_API_KEY")
-            //     ? coinmarketcapPlugin
-            //     : null,
-            // getSecret(character, "COINBASE_COMMERCE_KEY")
-            //     ? coinbaseCommercePlugin
-            //     : null,
-            getSecret(character, "FAL_API_KEY") ||
+                getSecret(character, "SOLANA_ADMIN_PUBLIC_KEY") &&
+                getSecret(character, "SOLANA_PRIVATE_KEY") &&
+                // getSecret(character, "SOLANA_ADMIN_PRIVATE_KEY")
+                //     ? nftGenerationPlugin
+                //     : null,
+                // getSecret(character, "ZEROG_PRIVATE_KEY")
+                //     ? zgPlugin
+                //     : null,
+                // getSecret(character, "COINMARKETCAP_API_KEY")
+                //     ? coinmarketcapPlugin
+                //     : null,
+                // getSecret(character, "COINBASE_COMMERCE_KEY")
+                //     ? coinbaseCommercePlugin
+                //     : null,
+                getSecret(character, "FAL_API_KEY")) ||
             getSecret(character, "OPENAI_API_KEY") ||
             getSecret(character, "VENICE_API_KEY") ||
             getSecret(character, "NINETEEN_AI_API_KEY") ||
@@ -802,7 +793,7 @@ export async function createAgent(
             getSecret(character, "CRONOSZKEVM_PRIVATE_KEY")
                 ? cronosZkEVMPlugin
                 : null,
-            getSecret(character, "TEE_MARLIN") ? teeMarlinPlugin : null,
+            // getSecret(character, "TEE_MARLIN") ? teeMarlinPlugin : null,
             getSecret(character, "TON_PRIVATE_KEY") ? tonPlugin : null,
             // getSecret(character, "THIRDWEB_SECRET_KEY") ? thirdwebPlugin : null,
             // getSecret(character, "SUI_PRIVATE_KEY") ? suiPlugin : null,
@@ -816,15 +807,15 @@ export async function createAgent(
                 ? echoChambersPlugin
                 : null,
             // getSecret(character, "LETZAI_API_KEY") ? letzAIPlugin : null,
-            getSecret(character, "STARGAZE_ENDPOINT") ? stargazePlugin : null,
-            getSecret(character, "GIPHY_API_KEY") ? giphyPlugin : null,
+            // getSecret(character, "STARGAZE_ENDPOINT") ? stargazePlugin : null,
+            // getSecret(character, "GIPHY_API_KEY") ? giphyPlugin : null,
             // getSecret(character, "GENLAYER_PRIVATE_KEY")
             //     ? genLayerPlugin
             //     : null,
-            getSecret(character, "AVAIL_SEED") &&
-            getSecret(character, "AVAIL_APP_ID")
-                ? availPlugin
-                : null,
+            // getSecret(character, "AVAIL_SEED") &&
+            // getSecret(character, "AVAIL_APP_ID")
+            //     ? availPlugin
+            //     : null,
             // getSecret(character, "OPEN_WEATHER_API_KEY")
             //     ? openWeatherPlugin
             //     : null,
@@ -988,9 +979,7 @@ async function startAgent(
 
 const startAgents = async () => {
     const directClient = new DirectClient();
-    let serverPort = parseInt(
-        process.env.PORT || settings.SERVER_PORT || "10000"
-    );
+    let serverPort = parseInt(process.env.PORT || settings.PORT || "10000");
     const args = parseArguments();
     let charactersArg = args.characters || args.character;
     let characters = [defaultCharacter];
@@ -1020,7 +1009,7 @@ const startAgents = async () => {
 
     elizaLogger.log(`Server started on port ${serverPort}`);
     elizaLogger.log(
-        "Run `pnpm start:client` to start the client and visit the outputted URL (http://localhost:5173) to chat with your agents. When running multiple agents, use client with different port `SERVER_PORT=3001 pnpm start:client`"
+        "Run `pnpm start:client` to start the client and visit the outputted URL (http://localhost:5173) to chat with your agents. When running multiple agents, use client with different port `PORT=3001 pnpm start:client`"
     );
 };
 

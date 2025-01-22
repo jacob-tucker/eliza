@@ -274,7 +274,7 @@ services:
             - SLIPPAGE=1
             - SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
             - HELIUS_API_KEY=$HELIUS_API_KEY
-            - SERVER_PORT=3000
+            - PORT=3000
             - WALLET_SECRET_SALT=$WALLET_SECRET_SALT
             - TEE_MODE=PRODUCTION
         ports:
