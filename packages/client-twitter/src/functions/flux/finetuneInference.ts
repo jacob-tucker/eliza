@@ -3,7 +3,7 @@ import axios from "axios";
 export async function finetuneInference(
     finetuneId: string,
     prompt: string,
-    finetuneStrength = 1.2,
+    finetuneStrength = 1.5,
     endpoint = "flux-pro-1.1-ultra-finetuned",
     additionalParams: Record<string, any> = {}
 ): Promise<{ id: string }> {

@@ -27,9 +27,11 @@ import {
 } from "discord.js";
 import { State } from "@elizaos/core";
 import { ActionResponse } from "@elizaos/core";
-import { finetuneInference } from "./functions/finetuneInference.ts";
-import { getInference } from "./functions/getInference.ts";
-import { convertImageUrlToBase64 } from "./functions/convertImageUrlToBase64.ts";
+import { finetuneInference } from "./functions/flux/finetuneInference.ts";
+import { getInference } from "./functions/flux/getInference.ts";
+import { convertImageUrlToBase64 } from "./functions/flux/convertImageUrlToBase64.ts";
+import { registerIp } from "./functions/story/register.ts";
+import { generate } from "./functions/generate/generate.ts";
 
 const MAX_TIMELINES_TO_FETCH = 15;
 
@@ -499,81 +501,11 @@ export class TwitterPostClient {
                 "twitter"
             );
 
-            const topics = this.runtime.character.topics.join(", ");
-
-            const state = await this.runtime.composeState(
-                {
-                    userId: this.runtime.agentId,
-                    roomId: roomId,
-                    agentId: this.runtime.agentId,
-                    content: {
-                        text: topics || "",
-                        action: "TWEET",
-                    },
-                },
-                {
-                    twitterUserName: this.client.profile.username,
-                }
-            );
-
-            const context = composeContext({
-                state,
-                template:
-                    this.runtime.character.templates?.twitterPostTemplate ||
-                    twitterPostTemplate,
-            });
-
-            elizaLogger.debug("generate post prompt:\n" + context);
-
-            const IMAGE_SYSTEM_PROMPT = `You create product design mockups in the blockchain/crypto space. Your output should be very concise, with a maximum of 3 sentences. Your output should only contain the description of the mockup, but NOT an instruction like "create an image that..."`;
-
-            const IMAGE_PROMPT_INPUT = `Come up with random product design mockups for crypto/blockchain applications. Some ideas include an improvement to a crypto wallet, marketplace, NFT, or really any concept, but I would stay away from smart contracts. Here are some example outputs, which should be very similar to what you output. Note that I only want you to output one, not multiple options:
-1. "swapping with ai doesn't always have to be in a chat"
-2. "LLMs are like athletes. there isn't necessarily an absolute "best". they each have their specializations, strengths and weaknesses. so when you think about AI in the context of your wallet, you should have a choice based on your intent."
-3. "choose a model in your wallet"
-4. "can tokens replace tolls?"
-5. "LLMs that give context on hover"
-6. "listing nfts is hard. ai can fix it. it can also make things like dynamic listings possible."`;
-
-            const newTweetContent = await generateText({
-                runtime: this.runtime,
-                context: IMAGE_PROMPT_INPUT,
-                modelClass: ModelClass.MEDIUM,
-                customSystemPrompt: IMAGE_SYSTEM_PROMPT,
-            });
+            const newTweetContent = await generate();
+            console.log("newTweetContent", newTweetContent);
 
             // First attempt to clean content
-            let cleanedContent = "";
-
-            // Try parsing as JSON first
-            try {
-                const parsedResponse = JSON.parse(newTweetContent);
-                if (parsedResponse.text) {
-                    cleanedContent = parsedResponse.text;
-                } else if (typeof parsedResponse === "string") {
-                    cleanedContent = parsedResponse;
-                }
-            } catch (error) {
-                error.linted = true; // make linter happy since catch needs a variable
-                // If not JSON, clean the raw content
-                cleanedContent = newTweetContent
-                    .replace(/^\s*{?\s*"text":\s*"|"\s*}?\s*$/g, "") // Remove JSON-like wrapper
-                    .replace(/^['"](.*)['"]$/g, "$1") // Remove quotes
-                    .replace(/\\"/g, '"') // Unescape quotes
-                    .replace(/\\n/g, "\n\n") // Unescape newlines, ensures double spaces
-                    .trim();
-            }
-
-            if (!cleanedContent) {
-                elizaLogger.error(
-                    "Failed to extract valid content from response:",
-                    {
-                        rawResponse: newTweetContent,
-                        attempted: "JSON parsing",
-                    }
-                );
-                return;
-            }
+            let cleanedContent = newTweetContent;
 
             // Truncate the content to the maximum tweet length specified in the environment settings, ensuring the truncation respects sentence boundaries.
             const maxTweetLength = this.client.twitterConfig.MAX_TWEET_LENGTH;
@@ -595,8 +527,8 @@ export class TwitterPostClient {
             // FINAL TEXT CONTENT ^
             // generate the image now
             const inference = await finetuneInference(
-                "f219feed-2eca-4e34-b857-ce3d809b761a",
-                "Create an image that showcases an iPhone, laptop, or specific application product design mockup with the following theme: " +
+                process.env.FINETUNE_ID,
+                "Create an iPhone mockup with a UI that showcases the device frame to spotlight the key feature in the center of the image frame, adapting UI elements from popular everyday apps like Phantom, Doordash, iMessage, Uber, Amazon, Airbnb, Tinder, or Twitter, with the following theme: " +
                     cleanedContent
             );
             let inferenceData = await getInference(inference.id);
@@ -607,9 +539,11 @@ export class TwitterPostClient {
                 inferenceData = await getInference(inference.id);
             }
 
-            const image = await convertImageUrlToBase64(
+            const imageBase64 = await convertImageUrlToBase64(
                 inferenceData.result.sample
             );
+
+            // await registerIp(imageBase64, cleanedContent);
 
             if (this.isDryRun) {
                 elizaLogger.info(
@@ -639,7 +573,7 @@ export class TwitterPostClient {
                         roomId,
                         newTweetContent,
                         this.twitterUsername,
-                        image
+                        imageBase64
                     );
                 }
             } catch (error) {
