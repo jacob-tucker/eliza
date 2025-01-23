@@ -624,6 +624,9 @@ importers:
       glob:
         specifier: 11.0.0
         version: 11.0.0
+      openai:
+        specifier: 4.80.0
+        version: 4.80.0(encoding@0.1.13)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.23.8)
       pinata-web3:
         specifier: ^0.5.4
         version: 0.5.4
@@ -20992,7 +20995,7 @@ snapshots:
       '@octokit/request-error': 3.0.3
       '@octokit/types': 9.3.2
       is-plain-object: 5.0.0
-      node-fetch: 2.6.7(encoding@0.1.13)
+      node-fetch: 2.7.0(encoding@0.1.13)
       universal-user-agent: 6.0.1
     transitivePeerDependencies:
       - encoding
@@ -26201,7 +26204,7 @@ snapshots:
       microsoft-cognitiveservices-speech-sdk: 1.42.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       msgpack-lite: 0.1.26
       onnxruntime-node: 1.20.1
-      openai: 4.73.0(encoding@0.1.13)(zod@3.23.8)
+      openai: 4.80.0(encoding@0.1.13)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.23.8)
       sam-js: 0.3.1
       strip-ansi: 7.1.0
       tar: 7.4.3
@@ -26986,7 +26989,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.3.4
+      debug: 4.4.0(supports-color@5.5.0)
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -31243,6 +31246,21 @@ snapshots:
       node-fetch: 2.7.0(encoding@0.1.13)
     optionalDependencies:
       ws: 7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - encoding
+
+  openai@4.80.0(encoding@0.1.13)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.23.8):
+    dependencies:
+      '@types/node': 18.19.71
+      '@types/node-fetch': 2.6.12
+      abort-controller: 3.0.0
+      agentkeepalive: 4.6.0
+      form-data-encoder: 1.7.2
+      formdata-node: 4.4.1
+      node-fetch: 2.7.0(encoding@0.1.13)
+    optionalDependencies:
+      ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       zod: 3.23.8
     transitivePeerDependencies:
       - encoding

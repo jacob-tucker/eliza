@@ -31,8 +31,7 @@ import { finetuneInference } from "./functions/flux/finetuneInference.ts";
 import { getInference } from "./functions/flux/getInference.ts";
 import { convertImageUrlToBase64 } from "./functions/flux/convertImageUrlToBase64.ts";
 import { registerIp } from "./functions/story/register.ts";
-import OpenAI from "openai";
-// import { generate } from "./functions/generate/generate.ts";
+import { generate } from "./functions/generate/generate.ts";
 
 const MAX_TIMELINES_TO_FETCH = 15;
 
@@ -502,43 +501,11 @@ export class TwitterPostClient {
                 "twitter"
             );
 
-            console.log("generating new tweet content here");
-
-            const newTweetContent = "hey";
+            const newTweetContent = await generate();
             console.log("newTweetContent", newTweetContent);
 
             // First attempt to clean content
-            let cleanedContent = "";
-
-            // Try parsing as JSON first
-            try {
-                const parsedResponse = JSON.parse(newTweetContent);
-                if (parsedResponse.text) {
-                    cleanedContent = parsedResponse.text;
-                } else if (typeof parsedResponse === "string") {
-                    cleanedContent = parsedResponse;
-                }
-            } catch (error) {
-                error.linted = true; // make linter happy since catch needs a variable
-                // If not JSON, clean the raw content
-                cleanedContent = newTweetContent
-                    .replace(/^\s*{?\s*"text":\s*"|"\s*}?\s*$/g, "") // Remove JSON-like wrapper
-                    .replace(/^['"](.*)['"]$/g, "$1") // Remove quotes
-                    .replace(/\\"/g, '"') // Unescape quotes
-                    .replace(/\\n/g, "\n\n") // Unescape newlines, ensures double spaces
-                    .trim();
-            }
-
-            if (!cleanedContent) {
-                elizaLogger.error(
-                    "Failed to extract valid content from response:",
-                    {
-                        rawResponse: newTweetContent,
-                        attempted: "JSON parsing",
-                    }
-                );
-                return;
-            }
+            let cleanedContent = newTweetContent;
 
             // Truncate the content to the maximum tweet length specified in the environment settings, ensuring the truncation respects sentence boundaries.
             const maxTweetLength = this.client.twitterConfig.MAX_TWEET_LENGTH;
@@ -561,7 +528,7 @@ export class TwitterPostClient {
             // generate the image now
             const inference = await finetuneInference(
                 process.env.FINETUNE_ID,
-                "Create an image that showcases an iPhone, or specific application product design mockup with the following theme: " +
+                "Create an iPhone mockup with a UI that showcases the device frame to spotlight the key feature in the center of the image frame, adapting UI elements from popular everyday apps like Phantom, Doordash, iMessage, Uber, Amazon, Airbnb, Tinder, or Twitter, with the following theme: " +
                     cleanedContent
             );
             let inferenceData = await getInference(inference.id);
@@ -576,7 +543,7 @@ export class TwitterPostClient {
                 inferenceData.result.sample
             );
 
-            await registerIp(imageBase64, cleanedContent);
+            // await registerIp(imageBase64, cleanedContent);
 
             if (this.isDryRun) {
                 elizaLogger.info(

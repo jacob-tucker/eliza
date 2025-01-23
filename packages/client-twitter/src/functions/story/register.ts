@@ -66,8 +66,6 @@ export async function registerIp(imageBase64: string, prompt: string) {
         .update(JSON.stringify(nftMetadata))
         .digest("hex");
 
-    console.log("Hello!");
-
     const response = await client.ipAsset.mintAndRegisterIpAssetWithPilTerms({
         spgNftContract: process.env.STORY_SPG_NFT_CONTRACT_ADDRESS as Address,
         terms: [], // IP already has non-commercial social remixing terms. You can add more here.

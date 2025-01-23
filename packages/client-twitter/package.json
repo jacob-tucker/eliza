@@ -27,7 +27,8 @@
         "axios": "^1.7.9",
         "pinata-web3": "^0.5.4",
         "viem": "^2.22.9",
-        "@story-protocol/core-sdk": "^1.2.0-rc.4"
+        "@story-protocol/core-sdk": "^1.2.0-rc.4",
+        "openai": "4.80.0"
     },
     "devDependencies": {
         "tsup": "8.3.5",
