@@ -21,12 +21,6 @@ const messages = [
 
 // return new tweet content
 export async function generate(): Promise<string> {
-    // const newTweetContent = await generateText({
-    //     runtime: this.runtime,
-    //     context: IMAGE_PROMPT_INPUT,
-    //     modelClass: ModelClass.MEDIUM,
-    //     customSystemPrompt: IMAGE_SYSTEM_PROMPT,
-
     // const perplexityContext = await generatePerplexityContext();
     // const newPrompt = `${IMAGE_PROMPT_INPUT}
 

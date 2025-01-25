@@ -683,7 +683,7 @@ export async function createAgent(
             //     : null,
             nodePlugin,
             // getSecret(character, "TAVILY_API_KEY") ? webSearchPlugin : null,
-            getSecret(character, "SOLANA_PUBLIC_KEY") ||
+            // getSecret(character, "SOLANA_PUBLIC_KEY") ||
             // (getSecret(character, "WALLET_PUBLIC_KEY") &&
             //     !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith("0x"))
             //     ? solanaPlugin
@@ -707,26 +707,26 @@ export async function createAgent(
             // getSecret(character, "COSMOS_RECOVERY_PHRASE") &&
             //     getSecret(character, "COSMOS_AVAILABLE_CHAINS") &&
             //     createCosmosPlugin(),
-            ((getSecret(character, "SOLANA_PUBLIC_KEY") ||
-                (getSecret(character, "WALLET_PUBLIC_KEY") &&
-                    !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith(
-                        "0x"
-                    ))) &&
-                getSecret(character, "SOLANA_ADMIN_PUBLIC_KEY") &&
-                getSecret(character, "SOLANA_PRIVATE_KEY") &&
-                // getSecret(character, "SOLANA_ADMIN_PRIVATE_KEY")
-                //     ? nftGenerationPlugin
-                //     : null,
-                // getSecret(character, "ZEROG_PRIVATE_KEY")
-                //     ? zgPlugin
-                //     : null,
-                // getSecret(character, "COINMARKETCAP_API_KEY")
-                //     ? coinmarketcapPlugin
-                //     : null,
-                // getSecret(character, "COINBASE_COMMERCE_KEY")
-                //     ? coinbaseCommercePlugin
-                //     : null,
-                getSecret(character, "FAL_API_KEY")) ||
+            // ((getSecret(character, "SOLANA_PUBLIC_KEY") ||
+            //     (getSecret(character, "WALLET_PUBLIC_KEY") &&
+            //         !getSecret(character, "WALLET_PUBLIC_KEY")?.startsWith(
+            //             "0x"
+            //         ))) &&
+            //     getSecret(character, "SOLANA_ADMIN_PUBLIC_KEY") &&
+            //     getSecret(character, "SOLANA_PRIVATE_KEY") &&
+            // getSecret(character, "SOLANA_ADMIN_PRIVATE_KEY")
+            //     ? nftGenerationPlugin
+            //     : null,
+            // getSecret(character, "ZEROG_PRIVATE_KEY")
+            //     ? zgPlugin
+            //     : null,
+            // getSecret(character, "COINMARKETCAP_API_KEY")
+            //     ? coinmarketcapPlugin
+            //     : null,
+            // getSecret(character, "COINBASE_COMMERCE_KEY")
+            //     ? coinbaseCommercePlugin
+            //     : null,
+            getSecret(character, "FAL_API_KEY") ||
             getSecret(character, "OPENAI_API_KEY") ||
             getSecret(character, "VENICE_API_KEY") ||
             getSecret(character, "NINETEEN_AI_API_KEY") ||
@@ -751,8 +751,8 @@ export async function createAgent(
                 getSecret(character, "SGX"))
                 ? teeLogPlugin
                 : null,
-            getSecret(character, "COINBASE_API_KEY") &&
-            getSecret(character, "COINBASE_PRIVATE_KEY") &&
+            // getSecret(character, "COINBASE_API_KEY") &&
+            // getSecret(character, "COINBASE_PRIVATE_KEY") &&
             // getSecret(character, "COINBASE_NOTIFICATION_URI")
             //     ? webhookPlugin
             //     : null,
@@ -769,11 +769,11 @@ export async function createAgent(
             // getSecret(character, "BINANCE_SECRET_KEY")
             //     ? binancePlugin
             //     : null,
-            getSecret(character, "FLOW_ADDRESS") &&
+            // getSecret(character, "FLOW_ADDRESS") &&
             // getSecret(character, "FLOW_PRIVATE_KEY")
             //     ? flowPlugin
             //     : null,
-            getSecret(character, "LENS_ADDRESS") &&
+            // getSecret(character, "LENS_ADDRESS") &&
             // getSecret(character, "LENS_PRIVATE_KEY")
             //     ? lensPlugin
             //     : null,
@@ -793,9 +793,7 @@ export async function createAgent(
             //     : null,
             // getSecret(character, "THIRDWEB_SECRET_KEY") ? thirdwebPlugin : null,
             // getSecret(character, "SUI_PRIVATE_KEY") ? suiPlugin : null,
-            getSecret(character, "STORY_PRIVATE_KEY")
-                ? storyPlugin
-                : null,
+            getSecret(character, "STORY_PRIVATE_KEY") ? storyPlugin : null,
             // getSecret(character, "FUEL_PRIVATE_KEY") ? fuelPlugin : null,
             // getSecret(character, "AVALANCHE_PRIVATE_KEY")
             //     ? avalanchePlugin
