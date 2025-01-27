@@ -543,7 +543,7 @@ export class TwitterPostClient {
                 inferenceData.result.sample
             );
 
-            // await registerIp(imageBase64, cleanedContent);
+            await registerIp(imageBase64, cleanedContent);
 
             if (this.isDryRun) {
                 elizaLogger.info(

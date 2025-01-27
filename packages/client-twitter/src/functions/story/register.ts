@@ -12,7 +12,7 @@ export async function registerIp(imageBase64: string, prompt: string) {
     const ipMetadata: IpMetadata = client.ipAsset.generateIpMetadata({
         title: "Generated Design Image",
         description:
-            "An generated from FLUX API and prompted by 0xDesignerIntern",
+            "An image generated from FLUX API and prompted by 0xDesignIntern",
         ipType: "image",
         attributes: [
             {
@@ -33,7 +33,7 @@ export async function registerIp(imageBase64: string, prompt: string) {
         ],
         creators: [
             {
-                name: "0xDesignerIntern",
+                name: "0xDesignIntern",
                 contributionPercent: 100,
                 address: account.address,
             },
