@@ -528,7 +528,7 @@ export class TwitterPostClient {
             // generate the image now
             const inference = await finetuneInference(
                 process.env.FINETUNE_ID,
-                "Create an iPhone mockup with a UI that showcases the device frame to spotlight the key feature in the center of the image frame, adapting UI elements from popular everyday apps like Phantom, Doordash, iMessage, Uber, Amazon, Airbnb, Tinder, or Twitter, with the following theme: " +
+                "create a realistic render of an iphone mockup with a clean, minimal ui. showcase the device frame to spotlight the key feature in the top, bottom, or middle of the device in the center of the image frame. focus on a single bold feature in the screen. take design cues from well-known apps like phantom, doordash, imessage, uber, amazon, airbnb, tinder, or twitter. avoid paragraphs of text and clutter in the ui—keep it simple and visually striking, with the following theme: " +
                     cleanedContent
             );
             let inferenceData = await getInference(inference.id);
